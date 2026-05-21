@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls /mnt/c/Users/hawer/Desktop/KitekatRepack/Source/Game/Rule/)",
+      "Bash(powershell -Command \"Get-ChildItem -Recurse -Filter '*.lua' 'C:\\\\Users\\\\hawer\\\\Desktop\\\\KitekatRepack\\\\Source\\\\Resource\\\\Script\\\\' | Select-String -Pattern 'complete_quest|set_quest|quest_complete|finish_quest' | Select-Object -First 20\")"
+    ]
+  }
+}
