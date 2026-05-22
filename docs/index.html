@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soup Macro — Macro-Tool für Windows</title>
+  <title>Soup Macro — Macro Tool for Windows</title>
   <style>
     /* ── Reset & Base ─────────────────────────────────────── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,30 +36,19 @@
     /* ── Animated background ──────────────────────────────── */
     body::before {
       content: "";
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background:
         radial-gradient(ellipse 80% 60% at 20% -10%, #c084fc18 0%, transparent 60%),
         radial-gradient(ellipse 60% 40% at 80% 110%, #818cf818 0%, transparent 60%),
         radial-gradient(ellipse 50% 50% at 50% 50%,  #34d39908 0%, transparent 70%);
       animation: bgPulse 8s ease-in-out infinite alternate;
-      pointer-events: none;
-      z-index: 0;
+      pointer-events: none; z-index: 0;
     }
-    @keyframes bgPulse {
-      0%   { opacity: .6; }
-      100% { opacity: 1; }
-    }
+    @keyframes bgPulse { 0% { opacity:.6; } 100% { opacity:1; } }
 
     /* ── Floating orbs ────────────────────────────────────── */
     .orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: .12;
-      animation: drift linear infinite;
-    }
+    .orb  { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .12; animation: drift linear infinite; }
     .orb:nth-child(1) { width:500px;height:500px;background:var(--purple);top:-200px;left:-100px;animation-duration:20s; }
     .orb:nth-child(2) { width:400px;height:400px;background:var(--blue);top:40%;right:-150px;animation-duration:25s;animation-delay:-8s; }
     .orb:nth-child(3) { width:350px;height:350px;background:var(--green);bottom:-100px;left:30%;animation-duration:18s;animation-delay:-4s; }
@@ -72,7 +61,7 @@
     /* ── Nav ─────────────────────────────────────────────── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      display: flex; align-items: center; gap: 16px;
+      display: flex; align-items: center; gap: 12px;
       padding: 16px 48px;
       background: rgba(7,7,18,.8);
       backdrop-filter: blur(20px);
@@ -82,14 +71,25 @@
     .nav-logo img { width: 28px; image-rendering: pixelated; }
     .nav-logo span { font-size: 16px; font-weight: 700; color: var(--text); }
     .nav-links { display: flex; gap: 28px; margin-left: auto; }
-    .nav-links a {
-      color: var(--muted2); text-decoration: none;
-      font-size: 14px; transition: color .2s;
-    }
+    .nav-links a { color: var(--muted2); text-decoration: none; font-size: 14px; transition: color .2s; }
     .nav-links a:hover { color: var(--text); }
+
+    /* ── Lang toggle ──────────────────────────────────────── */
+    #lang-toggle {
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border2);
+      color: var(--muted2);
+      font-size: 12px; font-weight: 700;
+      padding: 6px 12px; border-radius: 8px;
+      cursor: pointer; font-family: inherit;
+      transition: background .2s, color .2s, border-color .2s;
+      letter-spacing: .4px; flex-shrink: 0;
+    }
+    #lang-toggle:hover { background: rgba(255,255,255,.12); color: var(--text); border-color: var(--muted); }
+
     .nav-btn {
       display: flex; align-items: center; gap: 8px;
-      background: var(--green); color: #07071200;
+      background: var(--green);
       padding: 8px 18px; border-radius: 8px;
       font-weight: 700; font-size: 13px;
       text-decoration: none; color: #07071a;
@@ -101,16 +101,14 @@
     /* ── Hero ────────────────────────────────────────────── */
     .hero {
       position: relative; z-index: 1;
-      text-align: center;
-      padding: 120px 20px 100px;
+      text-align: center; padding: 120px 20px 100px;
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 8px;
       background: rgba(192,132,252,.12);
       border: 1px solid rgba(192,132,252,.3);
       color: var(--purple); font-size: 13px; font-weight: 600;
-      padding: 6px 16px; border-radius: 100px;
-      margin-bottom: 28px;
+      padding: 6px 16px; border-radius: 100px; margin-bottom: 28px;
       animation: fadeDown .6s ease both;
     }
     .hero-badge::before {
@@ -118,52 +116,34 @@
       border-radius: 50%; background: var(--purple);
       animation: pulse 2s ease-in-out infinite;
     }
-    @keyframes pulse {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50%      { opacity: .5; transform: scale(.8); }
-    }
+    @keyframes pulse { 0%,100% { opacity:1;transform:scale(1); } 50% { opacity:.5;transform:scale(.8); } }
 
     .hero-logo {
-      width: 100px; image-rendering: pixelated;
-      margin-bottom: 32px;
+      width: 100px; image-rendering: pixelated; margin-bottom: 32px;
       filter: drop-shadow(0 0 40px rgba(192,132,252,.4));
       animation: fadeDown .6s .1s ease both, float 4s ease-in-out infinite;
     }
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-10px); }
-    }
+    @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
 
     .hero h1 {
-      font-size: clamp(44px, 7vw, 72px);
-      font-weight: 900; line-height: 1.1;
-      letter-spacing: -1px;
+      font-size: clamp(44px, 7vw, 72px); font-weight: 900; line-height: 1.1; letter-spacing: -1px;
       background: linear-gradient(135deg, #eef2ff 0%, var(--purple) 50%, var(--blue) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 20px;
-      animation: fadeDown .6s .2s ease both;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 20px; animation: fadeDown .6s .2s ease both;
     }
-
     .hero-sub {
-      font-size: 18px; color: var(--muted2);
-      max-width: 540px; margin: 0 auto 48px;
-      line-height: 1.7;
-      animation: fadeDown .6s .3s ease both;
+      font-size: 18px; color: var(--muted2); max-width: 540px; margin: 0 auto 48px;
+      line-height: 1.7; animation: fadeDown .6s .3s ease both;
     }
-
     .hero-actions {
-      display: flex; justify-content: center;
-      align-items: center; gap: 16px; flex-wrap: wrap;
-      animation: fadeDown .6s .4s ease both;
+      display: flex; justify-content: center; align-items: center;
+      gap: 16px; flex-wrap: wrap; animation: fadeDown .6s .4s ease both;
     }
-
     .btn-dl {
       display: inline-flex; align-items: center; gap: 10px;
       background: linear-gradient(135deg, var(--green), #059669);
       color: #07071a; font-size: 16px; font-weight: 800;
-      padding: 16px 36px; border-radius: 12px;
-      text-decoration: none;
+      padding: 16px 36px; border-radius: 12px; text-decoration: none;
       box-shadow: 0 0 40px rgba(52,211,153,.3);
       transition: transform .2s, box-shadow .2s, filter .2s;
       position: relative; overflow: hidden;
@@ -173,52 +153,39 @@
       background: linear-gradient(135deg, rgba(255,255,255,.2), transparent);
       opacity: 0; transition: opacity .2s;
     }
-    .btn-dl:hover { transform: translateY(-2px); filter: brightness(1.1);
-      box-shadow: 0 0 60px rgba(52,211,153,.5); }
+    .btn-dl:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 0 60px rgba(52,211,153,.5); }
     .btn-dl:hover::before { opacity: 1; }
     .btn-dl svg { width: 20px; height: 20px; flex-shrink: 0; }
 
     .btn-gh {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid var(--border2);
+      background: rgba(255,255,255,.06); border: 1px solid var(--border2);
       color: var(--muted2); font-size: 15px; font-weight: 600;
-      padding: 15px 28px; border-radius: 12px;
-      text-decoration: none;
+      padding: 15px 28px; border-radius: 12px; text-decoration: none;
       transition: background .2s, color .2s, border-color .2s;
     }
-    .btn-gh:hover { background: rgba(255,255,255,.1); color: var(--text);
-      border-color: var(--muted); }
+    .btn-gh:hover { background: rgba(255,255,255,.1); color: var(--text); border-color: var(--muted); }
 
     .hero-meta {
       margin-top: 20px; font-size: 12px; color: var(--muted);
       animation: fadeDown .6s .5s ease both;
     }
-    .hero-meta span {
-      display: inline-flex; align-items: center; gap: 6px;
-      margin: 0 10px;
-    }
-    .hero-meta span::before {
-      content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--muted);
-    }
-    /* ── Trust row ──────────────────────────────────────────── */
+    .hero-meta span { display: inline-flex; align-items: center; gap: 6px; margin: 0 10px; }
+    .hero-meta span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
+
+    /* ── Trust row ───────────────────────────────────────── */
     .trust-row {
       display: flex; align-items: center; justify-content: center;
       gap: 0; flex-wrap: wrap;
-      margin-top: 24px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--border2);
-      border-radius: 16px;
-      padding: 10px 20px;
-      max-width: 520px; margin-inline: auto; margin-top: 24px;
+      background: rgba(255,255,255,.04); border: 1px solid var(--border2);
+      border-radius: 16px; padding: 10px 20px;
+      max-width: 520px; margin: 24px auto 0;
+      animation: fadeDown .6s .55s ease both; opacity: 0;
     }
     .trust-badge {
       display: inline-flex; align-items: center; gap: 10px;
-      padding: 8px 16px;
-      text-decoration: none;
-      border-radius: 12px;
-      transition: background .2s;
-      cursor: default;
+      padding: 8px 16px; text-decoration: none;
+      border-radius: 12px; transition: background .2s; cursor: default;
     }
     a.trust-badge { cursor: pointer; }
     a.trust-badge:hover { background: rgba(52,211,153,.08); }
@@ -229,18 +196,15 @@
     .trust-badge--static .trust-val { color: var(--text); }
     .trust-check {
       font-size: 14px; color: var(--green); font-weight: 900;
-      background: rgba(52,211,153,.15);
-      border: 1px solid rgba(52,211,153,.3);
+      background: rgba(52,211,153,.15); border: 1px solid rgba(52,211,153,.3);
       border-radius: 50%; width: 22px; height: 22px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
     .trust-divider { width: 1px; height: 32px; background: var(--border2); flex-shrink: 0; }
 
-    /* ── Screenshot mockup ───────────────────────────────── */
+    /* ── Mockup ──────────────────────────────────────────── */
     .mockup-wrap {
-      position: relative; z-index: 1;
-      max-width: 620px; margin: 60px auto 0;
+      position: relative; z-index: 1; max-width: 620px; margin: 60px auto 0;
       animation: fadeUp .8s .5s ease both;
     }
     .mockup-glow {
@@ -249,246 +213,88 @@
       pointer-events: none;
     }
     .mockup {
-      background: var(--card);
-      border: 1px solid var(--border2);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 40px 100px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.05);
+      background: var(--card); border: 1px solid var(--border2); border-radius: 16px;
+      overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.05);
     }
     .mockup-bar {
-      background: rgba(255,255,255,.04);
-      padding: 12px 16px;
-      display: flex; align-items: center; gap: 8px;
-      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.04); padding: 12px 16px;
+      display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border);
     }
-    .mockup-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-    }
-    .mockup-bar-title {
-      flex: 1; text-align: center;
-      font-size: 13px; color: var(--muted2); font-weight: 500;
-    }
-    .mockup-tabs {
-      display: flex;
-      background: rgba(255,255,255,.03);
-      border-bottom: 1px solid var(--border);
-    }
-    .mockup-tab {
-      flex: 1; padding: 10px 8px; text-align: center;
-      font-size: 11px; color: var(--muted); font-weight: 600;
-      position: relative;
-    }
+    .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mockup-bar-title { flex: 1; text-align: center; font-size: 13px; color: var(--muted2); font-weight: 500; }
+    .mockup-tabs { display: flex; background: rgba(255,255,255,.03); border-bottom: 1px solid var(--border); }
+    .mockup-tab { flex: 1; padding: 10px 8px; text-align: center; font-size: 11px; color: var(--muted); font-weight: 600; position: relative; }
     .mockup-tab.active { color: var(--text); }
-    .mockup-tab.active::after {
-      content: ""; position: absolute; bottom: 0; left: 10%; right: 10%;
-      height: 2px; background: var(--green); border-radius: 2px 2px 0 0;
-    }
+    .mockup-tab.active::after { content:""; position:absolute; bottom:0; left:10%; right:10%; height:2px; background:var(--green); border-radius:2px 2px 0 0; }
     .mockup-content { padding: 16px; }
-    .mockup-card {
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--border);
-      border-radius: 10px; padding: 14px;
-    }
-    .mockup-label {
-      font-size: 10px; font-weight: 700; color: var(--muted2);
-      text-transform: uppercase; letter-spacing: .8px; margin-bottom: 10px;
-    }
+    .mockup-card { background: rgba(255,255,255,.04); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+    .mockup-lbl { font-size: 10px; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 10px; }
     .mockup-row { display: flex; gap: 8px; margin-bottom: 8px; }
-    .mockup-input {
-      flex: 1; background: rgba(0,0,0,.4); border: 1px solid var(--border2);
-      border-radius: 6px; padding: 7px 10px;
-      font-size: 12px; color: var(--text);
-    }
+    .mockup-input { flex: 1; background: rgba(0,0,0,.4); border: 1px solid var(--border2); border-radius: 6px; padding: 7px 10px; font-size: 12px; color: var(--text); }
     .mockup-chips { display: flex; gap: 6px; margin-bottom: 12px; }
-    .mockup-chip {
-      padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 700;
-    }
-    .mockup-btn {
-      width: 100%; padding: 10px;
-      border-radius: 8px; text-align: center;
-      font-size: 13px; font-weight: 700;
-      background: var(--green); color: #07071a;
-    }
-    .mockup-status {
-      display: flex; align-items: center; gap: 6px;
-      margin-top: 10px; font-size: 11px;
-    }
-    .mockup-dot-sm {
-      width: 7px; height: 7px; border-radius: 50%;
-    }
-    .mockup-stopbar {
-      margin: 12px; padding: 10px;
-      background: rgba(248,113,113,.15); border: 1px solid rgba(248,113,113,.3);
-      border-radius: 8px; text-align: center;
-      font-size: 12px; font-weight: 700; color: var(--red);
-    }
+    .mockup-chip { padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+    .mockup-btn { width: 100%; padding: 10px; border-radius: 8px; text-align: center; font-size: 13px; font-weight: 700; background: var(--green); color: #07071a; }
+    .mockup-status { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 11px; }
+    .mockup-dot-sm { width: 7px; height: 7px; border-radius: 50%; }
+    .mockup-stopbar { margin: 12px; padding: 10px; background: rgba(248,113,113,.15); border: 1px solid rgba(248,113,113,.3); border-radius: 8px; text-align: center; font-size: 12px; font-weight: 700; color: var(--red); }
 
     /* ── Stats ───────────────────────────────────────────── */
     .stats {
       position: relative; z-index: 1;
-      display: flex; justify-content: center;
-      gap: 48px; flex-wrap: wrap;
-      padding: 60px 20px;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+      padding: 60px 20px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
       max-width: 900px; margin: 0 auto;
     }
     .stat { text-align: center; }
     .stat-num {
       font-size: 42px; font-weight: 900;
       background: linear-gradient(135deg, var(--text), var(--purple));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; line-height: 1;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1;
     }
     .stat-lbl { font-size: 13px; color: var(--muted2); margin-top: 6px; }
 
     /* ── Section ─────────────────────────────────────────── */
-    .section {
-      position: relative; z-index: 1;
-      max-width: 980px; margin: 0 auto;
-      padding: 80px 24px;
-    }
-    .section-eyebrow {
-      display: inline-block;
-      font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
-      text-transform: uppercase; color: var(--purple);
-      margin-bottom: 12px;
-    }
-    .section-title {
-      font-size: clamp(28px, 4vw, 42px);
-      font-weight: 800; line-height: 1.2;
-      margin-bottom: 16px;
-    }
-    .section-sub {
-      font-size: 16px; color: var(--muted2);
-      max-width: 560px; line-height: 1.7; margin-bottom: 48px;
-    }
+    .section { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 80px 24px; }
+    .section-eyebrow { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
+    .section-title { font-size: clamp(28px,4vw,42px); font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+    .section-sub { font-size: 16px; color: var(--muted2); max-width: 560px; line-height: 1.7; margin-bottom: 48px; }
 
     /* ── Feature grid ────────────────────────────────────── */
-    .feat-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-    }
+    .feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
     .feat-card {
-      background: var(--card);
-      border: 1px solid var(--border);
+      background: var(--card); border: 1px solid var(--border);
       border-radius: 16px; padding: 28px 26px;
       position: relative; overflow: hidden;
-      transition: border-color .3s, transform .3s, box-shadow .3s;
-      cursor: default;
+      transition: border-color .3s, transform .3s, box-shadow .3s; cursor: default;
     }
-    .feat-card::before {
-      content: "";
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, var(--accent-a, transparent) 0%, transparent 60%);
-      opacity: 0; transition: opacity .3s;
-    }
-    .feat-card:hover {
-      border-color: var(--accent-b, var(--purple));
-      transform: translateY(-4px);
-      box-shadow: 0 20px 60px rgba(0,0,0,.4);
-    }
+    .feat-card::before { content:""; position:absolute; inset:0; background:linear-gradient(135deg,var(--accent-a,transparent) 0%,transparent 60%); opacity:0; transition:opacity .3s; }
+    .feat-card:hover { border-color: var(--accent-b, var(--purple)); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,.4); }
     .feat-card:hover::before { opacity: 1; }
-    .feat-icon {
-      font-size: 32px; margin-bottom: 16px;
-      display: inline-block;
-      transition: transform .3s;
-    }
+    .feat-icon { font-size: 32px; margin-bottom: 16px; display: inline-block; transition: transform .3s; }
     .feat-card:hover .feat-icon { transform: scale(1.15); }
-    .feat-card h3 {
-      font-size: 17px; font-weight: 700;
-      margin-bottom: 10px; color: var(--text);
-    }
-    .feat-card p {
-      font-size: 14px; color: var(--muted2); line-height: 1.7;
-    }
-    .feat-tag {
-      display: inline-block; margin-top: 14px;
-      font-size: 11px; font-weight: 700;
-      padding: 3px 10px; border-radius: 100px;
-    }
+    .feat-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+    .feat-card p { font-size: 14px; color: var(--muted2); line-height: 1.7; }
+    .feat-tag { display: inline-block; margin-top: 14px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
 
     /* ── Hotkeys ─────────────────────────────────────────── */
-    .hk-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-    }
-    .hk-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px; padding: 20px 16px;
-      text-align: center;
-      transition: border-color .2s, transform .2s;
-    }
+    .hk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+    .hk-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 16px; text-align: center; transition: border-color .2s, transform .2s; }
     .hk-card:hover { transform: translateY(-3px); }
-    .key-badge {
-      display: inline-block;
-      padding: 6px 16px; border-radius: 8px;
-      font-size: 16px; font-weight: 800;
-      font-family: "Cascadia Code", "Consolas", monospace;
-      margin-bottom: 10px;
-      border: 1px solid;
-    }
+    .key-badge { display: inline-block; padding: 6px 16px; border-radius: 8px; font-size: 16px; font-weight: 800; font-family: "Cascadia Code","Consolas",monospace; margin-bottom: 10px; border: 1px solid; }
     .hk-card p { font-size: 13px; color: var(--muted2); }
 
     /* ── Install steps ───────────────────────────────────── */
-    .install-steps {
-      display: flex; flex-direction: column; gap: 12px;
-      max-width: 600px; margin: 0 auto;
-    }
-    .step {
-      display: flex; align-items: flex-start; gap: 20px;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 20px 24px;
-      transition: border-color .2s, transform .2s;
-    }
+    .install-steps { display: flex; flex-direction: column; gap: 12px; max-width: 600px; margin: 0 auto; }
+    .step { display: flex; align-items: flex-start; gap: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; transition: border-color .2s, transform .2s; }
     .step:hover { border-color: var(--border2); transform: translateX(4px); }
-    .step-num {
-      width: 36px; height: 36px; flex-shrink: 0;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--purple), var(--blue));
-      color: #07071a; font-weight: 800; font-size: 16px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .step-body h4 {
-      font-size: 15px; font-weight: 700; margin-bottom: 4px;
-    }
+    .step-num { width: 36px; height: 36px; flex-shrink: 0; border-radius: 10px; background: linear-gradient(135deg, var(--purple), var(--blue)); color: #07071a; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+    .step-body h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
     .step-body p { font-size: 13px; color: var(--muted2); line-height: 1.5; }
-    .step-body code {
-      font-size: 12px; color: var(--green);
-      background: rgba(52,211,153,.1); padding: 1px 6px;
-      border-radius: 4px; font-family: monospace;
-    }
+    .step-body code { font-size: 12px; color: var(--green); background: rgba(52,211,153,.1); padding: 1px 6px; border-radius: 4px; font-family: monospace; }
 
-    /* ── Scroll-reveal ───────────────────────────────────── */
-    .reveal {
-      opacity: 0; transform: translateY(30px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-left {
-      opacity: 0; transform: translateX(-30px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-    .reveal-left.visible { opacity: 1; transform: translateX(0); }
-
-    /* ── Stagger children ────────────────────────────────── */
-    .stagger > * { opacity: 0; transform: translateY(24px);
-      transition: opacity .5s ease, transform .5s ease; }
-    .stagger.visible > *:nth-child(1) { opacity:1;transform:none;transition-delay:.0s; }
-    .stagger.visible > *:nth-child(2) { opacity:1;transform:none;transition-delay:.1s; }
-    .stagger.visible > *:nth-child(3) { opacity:1;transform:none;transition-delay:.2s; }
-    .stagger.visible > *:nth-child(4) { opacity:1;transform:none;transition-delay:.3s; }
-    .stagger.visible > *:nth-child(5) { opacity:1;transform:none;transition-delay:.4s; }
-    .stagger.visible > *:nth-child(6) { opacity:1;transform:none;transition-delay:.5s; }
-    .stagger.visible > *:nth-child(n+7) { opacity:1;transform:none;transition-delay:.5s; }
-
-    /* ── Smartscreen notice ──────────────────────────────── */
+    /* ── Notice ──────────────────────────────────────────── */
     .notice {
-      background: rgba(251,191,36,.08);
-      border: 1px solid rgba(251,191,36,.25);
+      background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.25);
       border-radius: 12px; padding: 16px 20px;
       display: flex; gap: 12px; align-items: flex-start;
       margin-top: 24px; max-width: 600px; margin-inline: auto;
@@ -497,38 +303,35 @@
     .notice-icon { font-size: 18px; flex-shrink: 0; }
     .notice strong { color: var(--amber); }
 
+    /* ── Reveal ──────────────────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+    /* ── Stagger ─────────────────────────────────────────── */
+    .stagger > * { opacity: 0; transform: translateY(24px); transition: opacity .5s ease, transform .5s ease; }
+    .stagger.visible > *:nth-child(1) { opacity:1;transform:none;transition-delay:.0s; }
+    .stagger.visible > *:nth-child(2) { opacity:1;transform:none;transition-delay:.1s; }
+    .stagger.visible > *:nth-child(3) { opacity:1;transform:none;transition-delay:.2s; }
+    .stagger.visible > *:nth-child(4) { opacity:1;transform:none;transition-delay:.3s; }
+    .stagger.visible > *:nth-child(5) { opacity:1;transform:none;transition-delay:.4s; }
+    .stagger.visible > *:nth-child(6) { opacity:1;transform:none;transition-delay:.5s; }
+    .stagger.visible > *:nth-child(n+7) { opacity:1;transform:none;transition-delay:.5s; }
+
     /* ── CTA ─────────────────────────────────────────────── */
-    .cta {
-      position: relative; z-index: 1;
-      text-align: center;
-      padding: 100px 20px;
-      border-top: 1px solid var(--border);
-    }
-    .cta h2 {
-      font-size: clamp(28px, 4vw, 48px);
-      font-weight: 900; margin-bottom: 16px;
-    }
+    .cta { position: relative; z-index: 1; text-align: center; padding: 100px 20px; border-top: 1px solid var(--border); }
+    .cta h2 { font-size: clamp(28px,4vw,48px); font-weight: 900; margin-bottom: 16px; }
     .cta p { font-size: 16px; color: var(--muted2); margin-bottom: 40px; }
 
     /* ── Footer ──────────────────────────────────────────── */
-    footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid var(--border);
-      text-align: center; padding: 32px 20px;
-      font-size: 13px; color: var(--muted);
-    }
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); text-align: center; padding: 32px 20px; font-size: 13px; color: var(--muted); }
     footer a { color: var(--blue); text-decoration: none; transition: color .2s; }
     footer a:hover { color: var(--text); }
 
     /* ── Animations ──────────────────────────────────────── */
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeDown { from { opacity:0;transform:translateY(-20px); } to { opacity:1;transform:translateY(0); } }
+    @keyframes fadeUp   { from { opacity:0;transform:translateY(40px); }  to { opacity:1;transform:translateY(0); } }
 
     /* ── Responsive ──────────────────────────────────────── */
     @media (max-width: 640px) {
@@ -536,6 +339,8 @@
       .nav-links { display: none; }
       .hero { padding: 80px 20px 60px; }
       .stats { gap: 32px; }
+      .trust-row { flex-direction: column; gap: 4px; padding: 8px; }
+      .trust-divider { width: 80%; height: 1px; }
     }
   </style>
 </head>
@@ -555,31 +360,31 @@
     <span>Soup Macro</span>
   </div>
   <div class="nav-links">
-    <a href="#features">Features</a>
-    <a href="#hotkeys">Hotkeys</a>
-    <a href="#install">Installation</a>
+    <a href="#features" data-i18n="nav.features">Features</a>
+    <a href="#hotkeys" data-i18n="nav.hotkeys">Hotkeys</a>
+    <a href="#install" data-i18n="nav.install">Installation</a>
     <a href="https://github.com/FunkelVult/soup-macro" target="_blank">GitHub</a>
   </div>
+  <button id="lang-toggle" onclick="toggleLang()" title="Switch language">🇩🇪 DE</button>
   <a class="nav-btn" href="https://github.com/FunkelVult/soup-macro/releases/latest/download/SoupMacro_Setup.exe">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
       <path d="M12 5v10M7 15l5 5 5-5M3 19h18"/>
     </svg>
-    Download
+    <span data-i18n="nav.download">Download</span>
   </a>
 </nav>
 
 <!-- Hero -->
 <section class="hero">
-  <div class="hero-badge">v1.5 — Jetzt verfügbar</div>
+  <div class="hero-badge" data-i18n="hero.badge">v1.5 — Now available</div>
   <br>
   <img class="hero-logo"
        src="https://raw.githubusercontent.com/FunkelVult/soup-macro/main/logo.png"
        alt="Soup Macro Logo">
   <h1>Soup Macro</h1>
-  <p class="hero-sub">
-    Mächtiges Macro-Tool für Windows — Spam, Tame-Automatisierung,
-    eigene Makros mit Maussteuerung, Aufnahme &amp; Wiedergabe.
-    Kostenlos.
+  <p class="hero-sub" data-i18n="hero.sub">
+    Powerful macro tool for Windows — Spam, Tame automation,
+    custom macros with mouse control, recording &amp; playback. Free.
   </p>
   <div class="hero-actions">
     <a class="btn-dl"
@@ -587,7 +392,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <path d="M12 5v10M7 15l5 5 5-5M3 19h18"/>
       </svg>
-      SoupMacro_Setup.exe herunterladen
+      <span data-i18n="hero.dl">Download SoupMacro_Setup.exe</span>
     </a>
     <a class="btn-gh" href="https://github.com/FunkelVult/soup-macro" target="_blank">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -597,12 +402,12 @@
     </a>
   </div>
   <p class="hero-meta">
-    <span>Windows 10 / 11</span>
-    <span>Kostenlos &amp; Open Source</span>
+    <span data-i18n="hero.meta1">Windows 10 / 11</span>
+    <span data-i18n="hero.meta2">Free &amp; Open Source</span>
   </p>
 
-  <!-- Trust badges -->
-  <div class="trust-row" style="animation: fadeDown .6s .55s ease both; opacity:0">
+  <!-- Trust row -->
+  <div class="trust-row">
     <a class="trust-badge"
        href="https://www.virustotal.com/gui/url/4cd4a724e55a9600f3a3eeb04ee2d28826960dfb2c43d41e643c88647cb92a84?nocache=1"
        target="_blank" rel="noopener">
@@ -618,15 +423,15 @@
       <span class="trust-icon">🔓</span>
       <span class="trust-text">
         <span class="trust-label">Open Source</span>
-        <span class="trust-val">MIT Lizenz</span>
+        <span class="trust-val" data-i18n="trust.license">MIT License</span>
       </span>
     </div>
     <div class="trust-divider"></div>
     <div class="trust-badge trust-badge--static">
       <span class="trust-icon">💾</span>
       <span class="trust-text">
-        <span class="trust-label">Kostenlos</span>
-        <span class="trust-val">Kein Abo</span>
+        <span class="trust-label" data-i18n="trust.free">Free</span>
+        <span class="trust-val" data-i18n="trust.nosub">No Subscription</span>
       </span>
     </div>
   </div>
@@ -644,29 +449,29 @@
       <div class="mockup-tabs">
         <div class="mockup-tab active">⚡ SPAM</div>
         <div class="mockup-tab">🎯 TAME</div>
-        <div class="mockup-tab">🛠 MAKROS</div>
-        <div class="mockup-tab">⏺ AUFNAHME</div>
+        <div class="mockup-tab" data-i18n="mock.tab.macro">🛠 MACROS</div>
+        <div class="mockup-tab" data-i18n="mock.tab.rec">⏺ RECORD</div>
         <div class="mockup-tab">⚙ CONFIG</div>
       </div>
       <div class="mockup-content">
         <div class="mockup-card">
-          <div class="mockup-label">● SPAM MODUS</div>
+          <div class="mockup-lbl" data-i18n="mock.mode">● SPAM MODE</div>
           <div class="mockup-row">
-            <div class="mockup-input" style="color:#6b7aaa;font-size:11px">Tasten (z.B. 1,e,2)</div>
+            <div class="mockup-input" style="color:#6b7aaa;font-size:11px" data-i18n="mock.keys">Keys (e.g. 1,e,2)</div>
             <div class="mockup-input" style="color:#34d399;max-width:80px">1</div>
           </div>
           <div class="mockup-chips">
-            <div class="mockup-chip" style="background:rgba(52,211,153,.2);color:#34d399">Fest</div>
-            <div class="mockup-chip" style="background:rgba(255,255,255,.05);color:#4a5280">Zufall</div>
+            <div class="mockup-chip" style="background:rgba(52,211,153,.2);color:#34d399" data-i18n="mock.fixed">Fixed</div>
+            <div class="mockup-chip" style="background:rgba(255,255,255,.05);color:#4a5280" data-i18n="mock.rand">Random</div>
           </div>
           <div class="mockup-btn">▶  Start Spam  (F1)</div>
           <div class="mockup-status">
             <div class="mockup-dot-sm" style="background:#f87171"></div>
-            <span style="color:#f87171;font-size:11px;font-weight:700">Gestoppt</span>
+            <span style="color:#f87171;font-size:11px;font-weight:700" data-i18n="mock.stopped">Stopped</span>
           </div>
         </div>
       </div>
-      <div class="mockup-stopbar">⏹  ALLE STOPPEN  (F12)</div>
+      <div class="mockup-stopbar" data-i18n="mock.stopall">⏹  STOP ALL  (F12)</div>
     </div>
   </div>
 </section>
@@ -676,19 +481,19 @@
   <div class="stats reveal">
     <div class="stat">
       <div class="stat-num" data-count="5">0</div>
-      <div class="stat-lbl">Modi &amp; Tabs</div>
+      <div class="stat-lbl" data-i18n="stat.modes">Modes &amp; Tabs</div>
     </div>
     <div class="stat">
       <div class="stat-num" data-count="1">0</div>
-      <div class="stat-lbl">ms Intervall (min.)</div>
+      <div class="stat-lbl" data-i18n="stat.interval">ms interval (min.)</div>
     </div>
     <div class="stat">
       <div class="stat-num" data-count="6">0</div>
-      <div class="stat-lbl">Globale Hotkeys</div>
+      <div class="stat-lbl" data-i18n="stat.hotkeys">Global Hotkeys</div>
     </div>
     <div class="stat">
       <div class="stat-num" data-suffix="%">100</div>
-      <div class="stat-lbl">Kostenlos</div>
+      <div class="stat-lbl" data-i18n="stat.free">Free</div>
     </div>
   </div>
 </div>
@@ -696,77 +501,69 @@
 <!-- Features -->
 <section class="section" id="features">
   <div class="reveal" style="text-align:center">
-    <span class="section-eyebrow">Features</span>
-    <h2 class="section-title">Alles was du brauchst</h2>
-    <p class="section-sub" style="margin:0 auto 48px">
-      Von schnellem Spammen bis zu komplexen Makros mit Maussteuerung — alles in einem Tool.
+    <span class="section-eyebrow" data-i18n="feat.eyebrow">Features</span>
+    <h2 class="section-title" data-i18n="feat.title">Everything you need</h2>
+    <p class="section-sub" style="margin:0 auto 48px" data-i18n="feat.sub">
+      From quick spamming to complex macros with mouse control — all in one tool.
     </p>
   </div>
 
   <div class="feat-grid stagger">
 
-    <div class="feat-card"
-         style="--accent-a: rgba(52,211,153,.08); --accent-b: var(--green)">
+    <div class="feat-card" style="--accent-a:rgba(52,211,153,.08);--accent-b:var(--green)">
       <div class="feat-icon">⚡</div>
-      <h3>Spam Modus</h3>
-      <p>Mehrere Tasten kommagetrennt, festes oder zufälliges Intervall (1ms–5000ms), Hold-Mode und Startverzögerung.</p>
+      <h3 data-i18n="feat.spam.h">Spam Mode</h3>
+      <p data-i18n="feat.spam.p">Multiple keys comma-separated, fixed or random interval (1ms–5000ms), hold mode and start delay.</p>
       <span class="feat-tag" style="background:rgba(52,211,153,.12);color:var(--green)">F1</span>
     </div>
 
-    <div class="feat-card"
-         style="--accent-a: rgba(129,140,248,.08); --accent-b: var(--blue)">
+    <div class="feat-card" style="--accent-a:rgba(129,140,248,.08);--accent-b:var(--blue)">
       <div class="feat-icon">🎯</div>
-      <h3>Tame Modus</h3>
-      <p>Automatische Tame-Sequenz: Taste 2 → warten → Taste 1 → warten → wiederholen. Wartezeit frei einstellbar.</p>
+      <h3 data-i18n="feat.tame.h">Tame Mode</h3>
+      <p data-i18n="feat.tame.p">Automatic tame sequence: Key 2 → wait → Key 1 → wait → repeat. Wait time freely configurable.</p>
       <span class="feat-tag" style="background:rgba(129,140,248,.12);color:var(--blue)">F2</span>
     </div>
 
-    <div class="feat-card"
-         style="--accent-a: rgba(192,132,252,.08); --accent-b: var(--purple)">
+    <div class="feat-card" style="--accent-a:rgba(192,132,252,.08);--accent-b:var(--purple)">
       <div class="feat-icon">🛠️</div>
-      <h3>Eigene Makros</h3>
-      <p>Tastendruck, Warten, Mausklick an X/Y-Position und Label-Kommentare. Speichern &amp; laden als .json.</p>
+      <h3 data-i18n="feat.macro.h">Custom Macros</h3>
+      <p data-i18n="feat.macro.p">Key press, wait, mouse click at X/Y and label comments. Save &amp; load as .json.</p>
       <span class="feat-tag" style="background:rgba(192,132,252,.12);color:var(--purple)">F3</span>
     </div>
 
-    <div class="feat-card"
-         style="--accent-a: rgba(248,113,113,.08); --accent-b: var(--red)">
+    <div class="feat-card" style="--accent-a:rgba(248,113,113,.08);--accent-b:var(--red)">
       <div class="feat-icon">⏺️</div>
-      <h3>Aufnahme &amp; Wiedergabe</h3>
-      <p>Tastatur und Maus aufzeichnen und wiedergeben. Geschwindigkeit 0.5× bis 4×, Mausbewegungen optional.</p>
+      <h3 data-i18n="feat.rec.h">Record &amp; Playback</h3>
+      <p data-i18n="feat.rec.p">Record keyboard and mouse, play back. Speed 0.5× to 4×, mouse movements optional.</p>
       <span class="feat-tag" style="background:rgba(248,113,113,.12);color:var(--red)">F4 / F5</span>
     </div>
 
-    <div class="feat-card"
-         style="--accent-a: rgba(251,146,60,.08); --accent-b: var(--orange)">
+    <div class="feat-card" style="--accent-a:rgba(251,146,60,.08);--accent-b:var(--orange)">
       <div class="feat-icon">🔄</div>
-      <h3>Auto-Update</h3>
-      <p>Beim Start wird automatisch geprüft ob eine neue Version verfügbar ist — ein Klick installiert sie.</p>
-      <span class="feat-tag" style="background:rgba(251,146,60,.12);color:var(--orange)">Automatisch</span>
+      <h3 data-i18n="feat.upd.h">Auto-Update</h3>
+      <p data-i18n="feat.upd.p">On startup, automatically checks for a new version — one click installs it.</p>
+      <span class="feat-tag" style="background:rgba(251,146,60,.12);color:var(--orange)" data-i18n="feat.upd.tag">Automatic</span>
     </div>
 
-    <div class="feat-card"
-         style="--accent-a: rgba(251,191,36,.08); --accent-b: var(--amber)">
+    <div class="feat-card" style="--accent-a:rgba(251,191,36,.08);--accent-b:var(--amber)">
       <div class="feat-icon">⚙️</div>
-      <h3>Einstellungen</h3>
-      <p>Sound-Feedback, konfigurierbarer Panic-Key, Auto-Pause per Fenstername, Overlay, Profile speichern.</p>
+      <h3 data-i18n="feat.cfg.h">Settings</h3>
+      <p data-i18n="feat.cfg.p">Sound feedback, configurable panic key, auto-pause by window name, overlay, save profiles.</p>
       <span class="feat-tag" style="background:rgba(251,191,36,.12);color:var(--amber)">DE / EN</span>
     </div>
 
-    <div class="feat-card"
-         style="--accent-a: rgba(52,211,153,.08); --accent-b: var(--green)">
+    <div class="feat-card" style="--accent-a:rgba(52,211,153,.08);--accent-b:var(--green)">
       <div class="feat-icon">🖥️</div>
-      <h3>System-Tray &amp; Overlay</h3>
-      <p>Fenster schließen minimiert ins Tray. Das Overlay zeigt den Status aller Modi — schwebend &amp; draggable.</p>
-      <span class="feat-tag" style="background:rgba(52,211,153,.12);color:var(--green)">Immer aktiv</span>
+      <h3 data-i18n="feat.tray.h">System Tray &amp; Overlay</h3>
+      <p data-i18n="feat.tray.p">Closing the window minimizes to tray. The overlay shows all mode statuses — floating &amp; draggable.</p>
+      <span class="feat-tag" style="background:rgba(52,211,153,.12);color:var(--green)" data-i18n="feat.tray.tag">Always active</span>
     </div>
 
-    <div class="feat-card"
-         style="--accent-a: rgba(129,140,248,.08); --accent-b: var(--blue)">
+    <div class="feat-card" style="--accent-a:rgba(129,140,248,.08);--accent-b:var(--blue)">
       <div class="feat-icon">📦</div>
-      <h3>Richtiger Installer</h3>
-      <p>Installiert nach Programme, erstellt Shortcuts, Deinstallationseintrag und optional Autostart.</p>
-      <span class="feat-tag" style="background:rgba(129,140,248,.12);color:var(--blue)">Windows Installer</span>
+      <h3 data-i18n="feat.inst.h">Proper Installer</h3>
+      <p data-i18n="feat.inst.p">Installs to Program Files, creates shortcuts, uninstall entry and optional autostart.</p>
+      <span class="feat-tag" style="background:rgba(129,140,248,.12);color:var(--blue)" data-i18n="feat.inst.tag">Windows Installer</span>
     </div>
 
   </div>
@@ -775,50 +572,50 @@
 <!-- Hotkeys -->
 <section class="section" id="hotkeys" style="padding-top:0">
   <div class="reveal" style="text-align:center">
-    <span class="section-eyebrow">Hotkeys</span>
-    <h2 class="section-title">Alles per Tastendruck</h2>
-    <p class="section-sub" style="margin:0 auto 48px">
-      Alle Modi lassen sich ohne Fokuswechsel steuern — auch während du spielst.
+    <span class="section-eyebrow" data-i18n="hk.eyebrow">Hotkeys</span>
+    <h2 class="section-title" data-i18n="hk.title">Control Everything by Hotkey</h2>
+    <p class="section-sub" style="margin:0 auto 48px" data-i18n="hk.sub">
+      All modes can be controlled without switching focus — even while you're playing.
     </p>
   </div>
   <div class="hk-grid stagger">
     <div class="hk-card" style="border-color:rgba(52,211,153,.2)">
       <div class="key-badge" style="background:rgba(52,211,153,.12);color:var(--green);border-color:var(--green)">F1</div>
-      <p>Spam an/aus</p>
+      <p data-i18n="hk.spam">Spam on/off</p>
     </div>
     <div class="hk-card" style="border-color:rgba(129,140,248,.2)">
       <div class="key-badge" style="background:rgba(129,140,248,.12);color:var(--blue);border-color:var(--blue)">F2</div>
-      <p>Tame an/aus</p>
+      <p data-i18n="hk.tame">Tame on/off</p>
     </div>
     <div class="hk-card" style="border-color:rgba(192,132,252,.2)">
       <div class="key-badge" style="background:rgba(192,132,252,.12);color:var(--purple);border-color:var(--purple)">F3</div>
-      <p>Makro an/aus</p>
+      <p data-i18n="hk.macro">Macro on/off</p>
     </div>
     <div class="hk-card" style="border-color:rgba(248,113,113,.2)">
       <div class="key-badge" style="background:rgba(248,113,113,.12);color:var(--red);border-color:var(--red)">F4</div>
-      <p>Aufnahme an/aus</p>
+      <p data-i18n="hk.rec">Record on/off</p>
     </div>
     <div class="hk-card" style="border-color:rgba(52,211,153,.2)">
       <div class="key-badge" style="background:rgba(52,211,153,.12);color:var(--green);border-color:var(--green)">F5</div>
-      <p>Abspielen an/aus</p>
+      <p data-i18n="hk.play">Playback on/off</p>
     </div>
     <div class="hk-card" style="border-color:rgba(251,146,60,.2)">
       <div class="key-badge" style="background:rgba(251,146,60,.12);color:var(--orange);border-color:var(--orange)">Panic*</div>
-      <p>Alles sofort stoppen</p>
+      <p data-i18n="hk.panic">Stop everything instantly</p>
     </div>
   </div>
-  <p style="text-align:center;margin-top:16px;font-size:12px;color:var(--muted)">
-    * Panic-Key ist frei konfigurierbar (Standard: F12)
+  <p style="text-align:center;margin-top:16px;font-size:12px;color:var(--muted)" data-i18n="hk.note">
+    * Panic key is freely configurable (default: F12)
   </p>
 </section>
 
 <!-- Install -->
 <section class="section" id="install" style="padding-top:0">
   <div class="reveal" style="text-align:center">
-    <span class="section-eyebrow">Installation</span>
-    <h2 class="section-title">In 3 Schritten startklar</h2>
-    <p class="section-sub" style="margin:0 auto 48px">
-      Kein Python, keine Abhängigkeiten — einfach herunterladen und starten.
+    <span class="section-eyebrow" data-i18n="install.eyebrow">Installation</span>
+    <h2 class="section-title" data-i18n="install.title">Ready in 3 Steps</h2>
+    <p class="section-sub" style="margin:0 auto 48px" data-i18n="install.sub">
+      No Python, no dependencies — just download and start.
     </p>
   </div>
 
@@ -826,37 +623,36 @@
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">
-        <h4>Installer herunterladen</h4>
-        <p>Klicke auf den Download-Button und lade <code>SoupMacro_Setup.exe</code> herunter.</p>
+        <h4 data-i18n="install.s1.h">Download the Installer</h4>
+        <p data-i18n-html="install.s1.p">Click the download button and download <code>SoupMacro_Setup.exe</code>.</p>
       </div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">
-        <h4>Installieren &amp; SmartScreen bestätigen</h4>
-        <p>Windows zeigt ggf. eine SmartScreen-Warnung — auf <strong>„Weitere Informationen" → „Trotzdem ausführen"</strong> klicken. Das ist normal bei Open-Source-Software ohne teure Zertifikate.</p>
+        <h4 data-i18n="install.s2.h">Install &amp; Confirm SmartScreen</h4>
+        <p data-i18n-html="install.s2.p">Windows may show a SmartScreen warning — click <strong>"More info" → "Run anyway"</strong>. Normal for open-source software without expensive certificates.</p>
       </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
-        <h4>Loslegen</h4>
-        <p>Soup Macro startet automatisch nach der Installation — Modus wählen, Werte anpassen, Hotkey drücken.</p>
+        <h4 data-i18n="install.s3.h">Get Started</h4>
+        <p data-i18n="install.s3.p">Soup Macro starts automatically after installation — choose a mode, adjust values, press a hotkey.</p>
       </div>
     </div>
   </div>
 
   <div class="notice reveal">
     <span class="notice-icon">⚠️</span>
-    <span>
-      <strong>SmartScreen-Warnung:</strong>
-      Das Programm ist Open Source und kostenlos. Da es kein teures Code-Signing-Zertifikat hat,
-      zeigt Windows eine Warnung. Klicke auf <strong>„Weitere Informationen"</strong> und dann
-      <strong>„Trotzdem ausführen"</strong>.
-      Die Datei wurde von VirusTotal geprüft und ist sauber —
+    <span data-i18n-html="notice.text">
+      <strong>SmartScreen Warning:</strong>
+      The program is open source and free. Since it has no expensive code-signing certificate,
+      Windows shows a warning. Click <strong>"More info"</strong> and then <strong>"Run anyway"</strong>.
+      The file was checked by VirusTotal and is clean —
       <a href="https://www.virustotal.com/gui/url/4cd4a724e55a9600f3a3eeb04ee2d28826960dfb2c43d41e643c88647cb92a84?nocache=1"
          target="_blank" rel="noopener" style="color:var(--green);font-weight:700;text-decoration:none">
-        Ergebnis ansehen ↗
+        View result ↗
       </a>
     </span>
   </div>
@@ -866,18 +662,17 @@
 <section class="cta">
   <div class="reveal">
     <img src="https://raw.githubusercontent.com/FunkelVult/soup-macro/main/logo.png"
-         style="width:64px;image-rendering:pixelated;margin-bottom:24px;
-                filter:drop-shadow(0 0 30px rgba(192,132,252,.5))"
+         style="width:64px;image-rendering:pixelated;margin-bottom:24px;filter:drop-shadow(0 0 30px rgba(192,132,252,.5))"
          alt="Logo">
-    <h2>Bereit loszulegen?</h2>
-    <p>Kostenlos, kein Python, kein Abo — einfach herunterladen.</p>
+    <h2 data-i18n="cta.title">Ready to get started?</h2>
+    <p data-i18n="cta.sub">Free, no Python, no subscription — just download.</p>
     <a class="btn-dl"
        href="https://github.com/FunkelVult/soup-macro/releases/latest/download/SoupMacro_Setup.exe"
        style="display:inline-flex">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <path d="M12 5v10M7 15l5 5 5-5M3 19h18"/>
       </svg>
-      Download — SoupMacro_Setup.exe
+      <span data-i18n="cta.btn">Download — SoupMacro_Setup.exe</span>
     </a>
   </div>
 </section>
@@ -893,56 +688,236 @@
 </footer>
 
 <script>
-  /* ── Scroll reveal ──────────────────────────────────────── */
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add("visible");
-        // Count-up for stat numbers
-        e.target.querySelectorAll("[data-count]").forEach(el => {
-          const target = +el.dataset.count;
-          const suffix = el.dataset.suffix || "";
-          let start = 0;
-          const dur = 1200;
-          const step = 16;
-          const inc = target / (dur / step);
-          const timer = setInterval(() => {
-            start = Math.min(start + inc, target);
-            el.textContent = Math.round(start) + suffix;
-            if (start >= target) clearInterval(timer);
-          }, step);
-        });
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.15 });
+/* ── i18n strings ─────────────────────────────────────────────── */
+const STRINGS = {
+  en: {
+    title:            'Soup Macro — Macro Tool for Windows',
+    'nav.features':   'Features',
+    'nav.hotkeys':    'Hotkeys',
+    'nav.install':    'Installation',
+    'nav.download':   'Download',
+    'hero.badge':     'v1.5 — Now available',
+    'hero.sub':       'Powerful macro tool for Windows — Spam, Tame automation, custom macros with mouse control, recording & playback. Free.',
+    'hero.dl':        'Download SoupMacro_Setup.exe',
+    'hero.meta1':     'Windows 10 / 11',
+    'hero.meta2':     'Free & Open Source',
+    'trust.license':  'MIT License',
+    'trust.free':     'Free',
+    'trust.nosub':    'No Subscription',
+    'stat.modes':     'Modes & Tabs',
+    'stat.interval':  'ms interval (min.)',
+    'stat.hotkeys':   'Global Hotkeys',
+    'stat.free':      'Free',
+    'feat.eyebrow':   'Features',
+    'feat.title':     'Everything you need',
+    'feat.sub':       'From quick spamming to complex macros with mouse control — all in one tool.',
+    'feat.spam.h':    'Spam Mode',
+    'feat.spam.p':    'Multiple keys comma-separated, fixed or random interval (1ms–5000ms), hold mode and start delay.',
+    'feat.tame.h':    'Tame Mode',
+    'feat.tame.p':    'Automatic tame sequence: Key 2 → wait → Key 1 → wait → repeat. Wait time freely configurable.',
+    'feat.macro.h':   'Custom Macros',
+    'feat.macro.p':   'Key press, wait, mouse click at X/Y and label comments. Save & load as .json.',
+    'feat.rec.h':     'Record & Playback',
+    'feat.rec.p':     'Record keyboard and mouse, play back. Speed 0.5× to 4×, mouse movements optional.',
+    'feat.upd.h':     'Auto-Update',
+    'feat.upd.p':     'On startup, automatically checks for a new version — one click installs it.',
+    'feat.upd.tag':   'Automatic',
+    'feat.cfg.h':     'Settings',
+    'feat.cfg.p':     'Sound feedback, configurable panic key, auto-pause by window name, overlay, save profiles.',
+    'feat.tray.h':    'System Tray & Overlay',
+    'feat.tray.p':    'Closing the window minimizes to tray. The overlay shows all mode statuses — floating & draggable.',
+    'feat.tray.tag':  'Always active',
+    'feat.inst.h':    'Proper Installer',
+    'feat.inst.p':    'Installs to Program Files, creates shortcuts, uninstall entry and optional autostart.',
+    'feat.inst.tag':  'Windows Installer',
+    'hk.eyebrow':     'Hotkeys',
+    'hk.title':       'Control Everything by Hotkey',
+    'hk.sub':         "All modes can be controlled without switching focus — even while you're playing.",
+    'hk.spam':        'Spam on/off',
+    'hk.tame':        'Tame on/off',
+    'hk.macro':       'Macro on/off',
+    'hk.rec':         'Record on/off',
+    'hk.play':        'Playback on/off',
+    'hk.panic':       'Stop everything instantly',
+    'hk.note':        '* Panic key is freely configurable (default: F12)',
+    'install.eyebrow':'Installation',
+    'install.title':  'Ready in 3 Steps',
+    'install.sub':    'No Python, no dependencies — just download and start.',
+    'install.s1.h':   'Download the Installer',
+    'install.s1.p':   'Click the download button and download <code>SoupMacro_Setup.exe</code>.',
+    'install.s2.h':   'Install & Confirm SmartScreen',
+    'install.s2.p':   'Windows may show a SmartScreen warning — click <strong>"More info" → "Run anyway"</strong>. Normal for open-source software without expensive certificates.',
+    'install.s3.h':   'Get Started',
+    'install.s3.p':   'Soup Macro starts automatically after installation — choose a mode, adjust values, press a hotkey.',
+    'notice.text':    '<strong>SmartScreen Warning:</strong> The program is open source and free. Since it has no expensive code-signing certificate, Windows shows a warning. Click <strong>"More info"</strong> and then <strong>"Run anyway"</strong>. The file was checked by VirusTotal and is clean — <a href="https://www.virustotal.com/gui/url/4cd4a724e55a9600f3a3eeb04ee2d28826960dfb2c43d41e643c88647cb92a84?nocache=1" target="_blank" rel="noopener" style="color:var(--green);font-weight:700;text-decoration:none">View result ↗</a>',
+    'cta.title':      'Ready to get started?',
+    'cta.sub':        'Free, no Python, no subscription — just download.',
+    'cta.btn':        'Download — SoupMacro_Setup.exe',
+    'mock.tab.macro': '🛠 MACROS',
+    'mock.tab.rec':   '⏺ RECORD',
+    'mock.mode':      '● SPAM MODE',
+    'mock.keys':      'Keys (e.g. 1,e,2)',
+    'mock.fixed':     'Fixed',
+    'mock.rand':      'Random',
+    'mock.stopped':   'Stopped',
+    'mock.stopall':   '⏹  STOP ALL  (F12)',
+  },
+  de: {
+    title:            'Soup Macro — Macro-Tool für Windows',
+    'nav.features':   'Features',
+    'nav.hotkeys':    'Hotkeys',
+    'nav.install':    'Installation',
+    'nav.download':   'Download',
+    'hero.badge':     'v1.5 — Jetzt verfügbar',
+    'hero.sub':       'Mächtiges Macro-Tool für Windows — Spam, Tame-Automatisierung, eigene Makros mit Maussteuerung, Aufnahme & Wiedergabe. Kostenlos.',
+    'hero.dl':        'SoupMacro_Setup.exe herunterladen',
+    'hero.meta1':     'Windows 10 / 11',
+    'hero.meta2':     'Kostenlos & Open Source',
+    'trust.license':  'MIT Lizenz',
+    'trust.free':     'Kostenlos',
+    'trust.nosub':    'Kein Abo',
+    'stat.modes':     'Modi & Tabs',
+    'stat.interval':  'ms Intervall (min.)',
+    'stat.hotkeys':   'Globale Hotkeys',
+    'stat.free':      'Kostenlos',
+    'feat.eyebrow':   'Features',
+    'feat.title':     'Alles was du brauchst',
+    'feat.sub':       'Von schnellem Spammen bis zu komplexen Makros mit Maussteuerung — alles in einem Tool.',
+    'feat.spam.h':    'Spam Modus',
+    'feat.spam.p':    'Mehrere Tasten kommagetrennt, festes oder zufälliges Intervall (1ms–5000ms), Hold-Mode und Startverzögerung.',
+    'feat.tame.h':    'Tame Modus',
+    'feat.tame.p':    'Automatische Tame-Sequenz: Taste 2 → warten → Taste 1 → warten → wiederholen. Wartezeit frei einstellbar.',
+    'feat.macro.h':   'Eigene Makros',
+    'feat.macro.p':   'Tastendruck, Warten, Mausklick an X/Y-Position und Label-Kommentare. Speichern & laden als .json.',
+    'feat.rec.h':     'Aufnahme & Wiedergabe',
+    'feat.rec.p':     'Tastatur und Maus aufzeichnen und wiedergeben. Geschwindigkeit 0.5× bis 4×, Mausbewegungen optional.',
+    'feat.upd.h':     'Auto-Update',
+    'feat.upd.p':     'Beim Start wird automatisch geprüft ob eine neue Version verfügbar ist — ein Klick installiert sie.',
+    'feat.upd.tag':   'Automatisch',
+    'feat.cfg.h':     'Einstellungen',
+    'feat.cfg.p':     'Sound-Feedback, konfigurierbarer Panic-Key, Auto-Pause per Fenstername, Overlay, Profile speichern.',
+    'feat.tray.h':    'System-Tray & Overlay',
+    'feat.tray.p':    'Fenster schließen minimiert ins Tray. Das Overlay zeigt den Status aller Modi — schwebend & draggable.',
+    'feat.tray.tag':  'Immer aktiv',
+    'feat.inst.h':    'Richtiger Installer',
+    'feat.inst.p':    'Installiert nach Programme, erstellt Shortcuts, Deinstallationseintrag und optional Autostart.',
+    'feat.inst.tag':  'Windows Installer',
+    'hk.eyebrow':     'Hotkeys',
+    'hk.title':       'Alles per Tastendruck',
+    'hk.sub':         'Alle Modi lassen sich ohne Fokuswechsel steuern — auch während du spielst.',
+    'hk.spam':        'Spam an/aus',
+    'hk.tame':        'Tame an/aus',
+    'hk.macro':       'Makro an/aus',
+    'hk.rec':         'Aufnahme an/aus',
+    'hk.play':        'Abspielen an/aus',
+    'hk.panic':       'Alles sofort stoppen',
+    'hk.note':        '* Panic-Key ist frei konfigurierbar (Standard: F12)',
+    'install.eyebrow':'Installation',
+    'install.title':  'In 3 Schritten startklar',
+    'install.sub':    'Kein Python, keine Abhängigkeiten — einfach herunterladen und starten.',
+    'install.s1.h':   'Installer herunterladen',
+    'install.s1.p':   'Klicke auf den Download-Button und lade <code>SoupMacro_Setup.exe</code> herunter.',
+    'install.s2.h':   'Installieren & SmartScreen bestätigen',
+    'install.s2.p':   'Windows zeigt ggf. eine SmartScreen-Warnung — auf <strong>„Weitere Informationen" → „Trotzdem ausführen"</strong> klicken. Normal bei Open-Source-Software ohne teure Zertifikate.',
+    'install.s3.h':   'Loslegen',
+    'install.s3.p':   'Soup Macro startet automatisch nach der Installation — Modus wählen, Werte anpassen, Hotkey drücken.',
+    'notice.text':    '<strong>SmartScreen-Warnung:</strong> Das Programm ist Open Source und kostenlos. Da es kein teures Code-Signing-Zertifikat hat, zeigt Windows eine Warnung. Klicke auf <strong>„Weitere Informationen"</strong> und dann <strong>„Trotzdem ausführen"</strong>. Die Datei wurde von VirusTotal geprüft und ist sauber — <a href="https://www.virustotal.com/gui/url/4cd4a724e55a9600f3a3eeb04ee2d28826960dfb2c43d41e643c88647cb92a84?nocache=1" target="_blank" rel="noopener" style="color:var(--green);font-weight:700;text-decoration:none">Ergebnis ansehen ↗</a>',
+    'cta.title':      'Bereit loszulegen?',
+    'cta.sub':        'Kostenlos, kein Python, kein Abo — einfach herunterladen.',
+    'cta.btn':        'Download — SoupMacro_Setup.exe',
+    'mock.tab.macro': '🛠 MAKROS',
+    'mock.tab.rec':   '⏺ AUFNAHME',
+    'mock.mode':      '● SPAM MODUS',
+    'mock.keys':      'Tasten (z.B. 1,e,2)',
+    'mock.fixed':     'Fest',
+    'mock.rand':      'Zufall',
+    'mock.stopped':   'Gestoppt',
+    'mock.stopall':   '⏹  ALLE STOPPEN  (F12)',
+  }
+};
 
-  document.querySelectorAll(
-    ".reveal, .reveal-left, .stagger, .stat"
-  ).forEach(el => observer.observe(el));
+/* ── Apply language ───────────────────────────────────────────── */
+let currentLang = 'en';
 
-  /* ── Smooth nav highlight ───────────────────────────────── */
-  const sections = document.querySelectorAll("section[id]");
-  const navLinks = document.querySelectorAll(".nav-links a[href^='#']");
-  window.addEventListener("scroll", () => {
-    let current = "";
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 120) current = s.id;
-    });
-    navLinks.forEach(a => {
-      a.style.color = a.getAttribute("href") === "#" + current
-        ? "var(--text)" : "";
-    });
+function applyLang(lang) {
+  currentLang = lang;
+  const s = STRINGS[lang];
+  document.documentElement.lang = lang;
+  document.title = s.title;
+
+  // Plain text nodes
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const val = s[el.dataset.i18n];
+    if (val !== undefined) el.textContent = val;
   });
 
-  /* ── Mockup tab animation ───────────────────────────────── */
-  const mockupTabs = document.querySelectorAll(".mockup-tab");
-  let tabIdx = 0;
-  setInterval(() => {
-    mockupTabs.forEach(t => t.classList.remove("active"));
-    tabIdx = (tabIdx + 1) % mockupTabs.length;
-    mockupTabs[tabIdx].classList.add("active");
-  }, 2000);
+  // HTML content nodes
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const val = s[el.dataset.i18nHtml];
+    if (val !== undefined) el.innerHTML = val;
+  });
+
+  // Toggle button label
+  const btn = document.getElementById('lang-toggle');
+  if (btn) btn.textContent = lang === 'en' ? '🇩🇪 DE' : '🇬🇧 EN';
+
+  localStorage.setItem('soup-macro-lang', lang);
+}
+
+function toggleLang() {
+  applyLang(currentLang === 'en' ? 'de' : 'en');
+}
+
+// Auto-detect on load
+(function() {
+  const saved    = localStorage.getItem('soup-macro-lang');
+  const detected = navigator.language && navigator.language.startsWith('de') ? 'de' : 'en';
+  applyLang(saved || detected);
+})();
+
+/* ── Scroll reveal ────────────────────────────────────────────── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      // Count-up animation
+      e.target.querySelectorAll('[data-count]').forEach(el => {
+        const target = +el.dataset.count;
+        const suffix = el.dataset.suffix || '';
+        let start = 0;
+        const inc = target / (1200 / 16);
+        const timer = setInterval(() => {
+          start = Math.min(start + inc, target);
+          el.textContent = Math.round(start) + suffix;
+          if (start >= target) clearInterval(timer);
+        }, 16);
+      });
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal, .reveal-left, .stagger, .stat').forEach(el => observer.observe(el));
+
+/* ── Smooth nav highlight ─────────────────────────────────────── */
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current ? 'var(--text)' : '';
+  });
+});
+
+/* ── Mockup tab animation ─────────────────────────────────────── */
+const mockupTabs = document.querySelectorAll('.mockup-tab');
+let tabIdx = 0;
+setInterval(() => {
+  mockupTabs.forEach(t => t.classList.remove('active'));
+  tabIdx = (tabIdx + 1) % mockupTabs.length;
+  mockupTabs[tabIdx].classList.add('active');
+}, 2000);
 </script>
 </body>
 </html>
