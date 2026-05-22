@@ -5,7 +5,7 @@ echo ============================================
 echo.
 
 echo [1/4] Installiere Abhaengigkeiten...
-pip install pynput pyinstaller pillow
+pip install pynput pyinstaller pillow pystray
 echo.
 
 echo [2/4] Erstelle Icon aus logo.png...
