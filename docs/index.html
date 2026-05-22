@@ -201,17 +201,41 @@
     .hero-meta span::before {
       content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--muted);
     }
-    .hero-meta-vt {
-      display: inline-flex; align-items: center; gap: 6px;
-      margin: 0 10px;
-      color: var(--green); font-weight: 700;
-      text-decoration: none; font-size: 12px;
-      background: rgba(52,211,153,.1);
-      border: 1px solid rgba(52,211,153,.25);
-      padding: 3px 10px; border-radius: 100px;
-      transition: background .2s, border-color .2s;
+    /* ── Trust row ──────────────────────────────────────────── */
+    .trust-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; flex-wrap: wrap;
+      margin-top: 24px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      padding: 10px 20px;
+      max-width: 520px; margin-inline: auto; margin-top: 24px;
     }
-    .hero-meta-vt:hover { background: rgba(52,211,153,.2); border-color: rgba(52,211,153,.5); }
+    .trust-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 8px 16px;
+      text-decoration: none;
+      border-radius: 12px;
+      transition: background .2s;
+      cursor: default;
+    }
+    a.trust-badge { cursor: pointer; }
+    a.trust-badge:hover { background: rgba(52,211,153,.08); }
+    .trust-icon { font-size: 20px; flex-shrink: 0; }
+    .trust-text { display: flex; flex-direction: column; line-height: 1.3; }
+    .trust-label { font-size: 10px; color: var(--muted2); font-weight: 600; text-transform: uppercase; letter-spacing: .6px; }
+    .trust-val { font-size: 13px; font-weight: 800; color: var(--green); }
+    .trust-badge--static .trust-val { color: var(--text); }
+    .trust-check {
+      font-size: 14px; color: var(--green); font-weight: 900;
+      background: rgba(52,211,153,.15);
+      border: 1px solid rgba(52,211,153,.3);
+      border-radius: 50%; width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .trust-divider { width: 1px; height: 32px; background: var(--border2); flex-shrink: 0; }
 
     /* ── Screenshot mockup ───────────────────────────────── */
     .mockup-wrap {
@@ -575,16 +599,37 @@
   <p class="hero-meta">
     <span>Windows 10 / 11</span>
     <span>Kostenlos &amp; Open Source</span>
-    <a class="hero-meta-vt"
+  </p>
+
+  <!-- Trust badges -->
+  <div class="trust-row" style="animation: fadeDown .6s .55s ease both; opacity:0">
+    <a class="trust-badge"
        href="https://www.virustotal.com/gui/url/4cd4a724e55a9600f3a3eeb04ee2d28826960dfb2c43d41e643c88647cb92a84?nocache=1"
        target="_blank" rel="noopener">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="2.5">
-        <polyline points="20 6 9 17 4 12"/>
-      </svg>
-      VirusTotal: 0 Funde
+      <span class="trust-icon">🛡️</span>
+      <span class="trust-text">
+        <span class="trust-label">VirusTotal</span>
+        <span class="trust-val">0 / 72 Engines</span>
+      </span>
+      <span class="trust-check">✓</span>
     </a>
-  </p>
+    <div class="trust-divider"></div>
+    <div class="trust-badge trust-badge--static">
+      <span class="trust-icon">🔓</span>
+      <span class="trust-text">
+        <span class="trust-label">Open Source</span>
+        <span class="trust-val">MIT Lizenz</span>
+      </span>
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-badge trust-badge--static">
+      <span class="trust-icon">💾</span>
+      <span class="trust-text">
+        <span class="trust-label">Kostenlos</span>
+        <span class="trust-val">Kein Abo</span>
+      </span>
+    </div>
+  </div>
 
   <!-- App mockup -->
   <div class="mockup-wrap">
