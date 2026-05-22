@@ -156,6 +156,40 @@
 
   <div class="timeline ani" style="animation-delay:.15s">
 
+    <!-- v1.6 -->
+    <div class="tl-entry">
+      <div class="tl-rail">
+        <div class="tl-dot" style="background:var(--green);border-color:var(--green)"></div>
+        <div class="tl-line" style="background:linear-gradient(var(--green),var(--blue))"></div>
+      </div>
+      <div class="tl-body">
+        <div class="v-card" style="border-color:rgba(52,211,153,.3)">
+          <div class="v-header">
+            <span class="v-badge" style="background:rgba(52,211,153,.12);color:var(--green);border-color:rgba(52,211,153,.4)">v1.6</span>
+            <span class="v-date" data-i18n="v16.date">May 22, 2026</span>
+            <span class="v-tag" style="background:rgba(52,211,153,.15);color:var(--green)" data-i18n="tag.latest">Latest</span>
+          </div>
+
+          <div class="change-group">
+            <div class="change-group-label" style="color:var(--green)" data-i18n="lbl.new">New Features</div>
+            <div class="change-list">
+              <div class="change-item"><span class="change-icon">✦</span><span data-i18n="v16.n1"><strong>Resizable Window</strong> — The main window can now be freely resized; minimum size 420 × 560 px</span></div>
+              <div class="change-item"><span class="change-icon">✦</span><span data-i18n="v16.n2"><strong>Minimize to Tray</strong> — New button in Settings → Overlay; hides the window while keeping Soup Macro running</span></div>
+            </div>
+          </div>
+
+          <div class="change-group">
+            <div class="change-group-label" style="color:var(--blue)" data-i18n="lbl.fix">Bug Fixes</div>
+            <div class="change-list">
+              <div class="change-item"><span class="change-icon" style="color:var(--blue)">⚡</span><span data-i18n="v16.f1"><strong>Fixed interval field invisible</strong> — The "Interval (ms)" spinbox in Spam fixed mode was created but never packed/displayed</span></div>
+              <div class="change-item"><span class="change-icon" style="color:var(--blue)">⚡</span><span data-i18n="v16.f2"><strong>X button leaves processes running</strong> — Clicking × now calls <code>os._exit(0)</code> after stopping all threads, listeners and the tray icon — no orphaned processes remain</span></div>
+              <div class="change-item"><span class="change-icon" style="color:var(--blue)">⚡</span><span data-i18n="v16.f3"><strong>_tray_icon not initialized</strong> — Fixed potential AttributeError on first close; attribute is now set to <code>None</code> in <code>__init__</code></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- v1.5 -->
     <div class="tl-entry">
       <div class="tl-rail">

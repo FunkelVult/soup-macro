@@ -4,7 +4,7 @@
 ; ============================================================
 
 #define AppName      "Soup Macro"
-#define AppVersion   "1.4"
+#define AppVersion   "1.6"
 #define AppPublisher "FunkelVult"
 #define AppURL       "https://github.com/FunkelVult/soup-macro"
 #define AppExe       "SoupMacro.exe"

@@ -18,7 +18,7 @@ try:
 except ImportError:
     HAS_SOUND = False
 
-VERSION     = "1.5"
+VERSION     = "1.6"
 GITHUB_USER = "FunkelVult"
 GITHUB_REPO = "soup-macro"
 VERSION_URL = f"https://raw.githubusercontent.com/{GITHUB_USER}/{GITHUB_REPO}/main/version.txt"
@@ -301,6 +301,8 @@ S = {
     about_made="Erstellt von", about_ver="Version",
     pick_hint="Fenster minimiert sich — in 3s wird Mausposition übernommen.",
     tray_show="Öffnen", tray_stop="Alles stoppen", tray_quit="Beenden",
+    btn_minimize_tray="In Tray minimieren",
+    overlay_tray_hint="Fenster ausblenden — Soup Macro läuft im Hintergrund weiter.",
 ),
 "en": dict(
     tab_spam="SPAM", tab_tame="TAME", tab_macro="MACROS",
@@ -376,6 +378,8 @@ S = {
     about_made="Created by", about_ver="Version",
     pick_hint="Window minimizes — mouse position captured after 3s.",
     tray_show="Show", tray_stop="Stop All", tray_quit="Quit",
+    btn_minimize_tray="Minimize to Tray",
+    overlay_tray_hint="Hide window — Soup Macro keeps running in the background.",
 ),
 }
 
@@ -387,7 +391,8 @@ class MacroApp:
         self.lang = lang
         self.root.title("Soup Macro")
         self.root.geometry("540x780")
-        self.root.resizable(False, False)
+        self.root.resizable(True, True)
+        self.root.minsize(420, 560)
         self.root.configure(bg=BG)
 
         # Runtime state
@@ -406,6 +411,7 @@ class MacroApp:
         self._hold_lst     = None
         self._capturing_panic = False
         self._overlay      = None
+        self._tray_icon    = None
         self._ov_rows      = {}
         self._active_tab   = 0
         self._scroll_cvs   = {}
@@ -606,7 +612,7 @@ class MacroApp:
         self._fix_frame = tk.Frame(c, bg=CARD)
         self._fix_frame.pack(fill="x", padx=16, pady=(0,10))
         self._field(self._fix_frame, self.t("f_interval"),
-                    "spam_interval", 10, (1,5000,1), w=8)
+                    "spam_interval", 10, (1,5000,1), w=8).pack(fill="x")
 
         # Random frame (hidden)
         self._rnd_frame = tk.Frame(c, bg=CARD)
@@ -932,7 +938,14 @@ class MacroApp:
         tk.Label(co, text=self.t("overlay_hint"), font=("Segoe UI",9),
                  bg=CARD, fg=MUTED2).pack(padx=16, anchor="w")
         RoundBtn(co, self.t("btn_overlay"), PURPLE, self._show_overlay,
-                 h=36, r=8).pack(fill="x", padx=16, pady=(8,14))
+                 h=36, r=8).pack(fill="x", padx=16, pady=(8,4))
+        if HAS_TRAY:
+            tk.Label(co, text=self.t("overlay_tray_hint"), font=("Segoe UI",9),
+                     bg=CARD, fg=MUTED2).pack(padx=16, pady=(8,4), anchor="w")
+            RoundBtn(co, self.t("btn_minimize_tray"), MUTED2, self._minimize_to_tray,
+                     h=36, r=8, light=True).pack(fill="x", padx=16, pady=(0,14))
+        else:
+            tk.Frame(co, bg=CARD, height=14).pack()
 
         # Profile
         cpr = self._card(sc, self.t("card_profile"), BLUE)
@@ -1102,6 +1115,16 @@ class MacroApp:
             lbl.config(text=f"{label}:  {'Läuft' if a else 'Gestoppt'}", fg=c)
 
     # ── System tray ────────────────────────────────────────────
+    def _minimize_to_tray(self):
+        """Hide the window and keep running in the system tray."""
+        if not HAS_TRAY:
+            messagebox.showinfo(self.t("hint"),
+                "pystray not installed.", parent=self.root)
+            return
+        if not self._tray_icon:
+            self._setup_tray()
+        self.root.withdraw()
+
     def _setup_tray(self):
         if not HAS_TRAY: return
         try:
@@ -1122,19 +1145,27 @@ class MacroApp:
         return img
 
     def _on_close(self):
-        if HAS_TRAY:
-            self.root.withdraw()
-            if not self._tray_icon:
-                self._setup_tray()
-        else:
-            self._quit()
+        """X button always quits cleanly — no hidden processes."""
+        self._quit()
 
     def _quit(self):
-        self.stop_all()
+        """Stop all threads, destroy window, force-exit the process."""
+        # 1. Signal all loops to stop
+        self.spam_running = self.tame_running = self.macro_running = False
+        self.rec_running  = self.play_running = False
+        # 2. Stop pynput listeners
+        for lst in (self._kb_rec, self._ms_rec, self._hold_lst):
+            try: lst.stop()
+            except: pass
+        # 3. Stop tray icon if running
         try:
             if self._tray_icon: self._tray_icon.stop()
         except: pass
-        self.root.destroy()
+        # 4. Destroy the tkinter window
+        try: self.root.destroy()
+        except: pass
+        # 5. Force-kill all remaining threads (daemon or not)
+        os._exit(0)
 
     # ── Profile save/load ──────────────────────────────────────
     def _save_profile(self):
