@@ -40,8 +40,10 @@ def res(p):
     return os.path.join(base, p)
 
 def _cfg_path():
-    base = os.path.dirname(sys.executable) if getattr(sys,"frozen",False) \
-           else os.path.dirname(os.path.abspath(__file__))
+    # Store config in %APPDATA%\SoupMacro\ so it survives updates and is writable
+    appdata = os.environ.get("APPDATA") or os.path.expanduser("~")
+    base    = os.path.join(appdata, "SoupMacro")
+    os.makedirs(base, exist_ok=True)
     return os.path.join(base, "config.json")
 
 def load_cfg():
@@ -1638,22 +1640,37 @@ class MacroApp:
                   headers={"Accept":"application/vnd.github+json"})
             with urllib.request.urlopen(req, timeout=15) as r:
                 data = json.loads(r.read())
-            url = next((a["browser_download_url"] for a in data.get("assets",[])
-                        if a["name"]=="SoupMacro.exe"), None)
-            if not url: raise RuntimeError("SoupMacro.exe not found in release.")
-            exe = sys.executable; new = exe+".new"
-            def _p(c,b,tot):
+            assets = data.get("assets", [])
+
+            # Prefer installer → silent install; fall back to raw exe swap (legacy)
+            setup_url = next((a["browser_download_url"] for a in assets
+                              if a["name"] == "SoupMacro_Setup.exe"), None)
+            raw_url   = next((a["browser_download_url"] for a in assets
+                              if a["name"] == "SoupMacro.exe"), None)
+            url          = setup_url or raw_url
+            is_installer = setup_url is not None
+            if not url: raise RuntimeError("No download asset found in release.")
+
+            new = tempfile.mktemp(suffix=".exe")
+            def _p(c, b, tot):
                 if tot > 0:
                     pct = min(100, int(c*b*100/tot))
                     self.root.after(0, lambda p=pct:
                         self.upd_lbl.config(text=f"{self.t('downloading')} {p}%", fg=ORANGE))
             urllib.request.urlretrieve(url, new, reporthook=_p)
-            bat = tempfile.mktemp(suffix=".bat")
-            with open(bat,"w") as f:
-                f.write(f'@echo off\ntimeout /t 2 /nobreak>nul\n'
-                        f'move /y "{new}" "{exe}"\nstart "" "{exe}"\ndel "%~f0"\n')
             self.root.after(0, lambda: self.upd_lbl.config(text=self.t("upd_done"), fg=GREEN))
-            subprocess.Popen(["cmd","/c",bat], creationflags=subprocess.CREATE_NO_WINDOW)
+
+            if is_installer:
+                # Run installer silently — replaces exe, keeps config in %APPDATA%
+                subprocess.Popen([new, "/VERYSILENT", "/NORESTART"])
+            else:
+                # Legacy: batch-swap raw exe
+                exe = sys.executable
+                bat = tempfile.mktemp(suffix=".bat")
+                with open(bat, "w") as f:
+                    f.write(f'@echo off\ntimeout /t 2 /nobreak>nul\n'
+                            f'move /y "{new}" "{exe}"\nstart "" "{exe}"\ndel "%~f0"\n')
+                subprocess.Popen(["cmd","/c",bat], creationflags=subprocess.CREATE_NO_WINDOW)
             self.root.after(1500, self.root.destroy)
         except Exception as ex:
             self.root.after(0, lambda: messagebox.showerror(
