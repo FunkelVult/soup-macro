@@ -52,6 +52,11 @@ VersionInfoCompany={#AppPublisher}
 VersionInfoDescription={#AppName} Installer
 ArchitecturesInstallIn64BitMode=x64compatible
 
+; Automatically close the app if it's running during install/update
+CloseApplications=yes
+CloseApplicationsFilter=*.exe
+RestartApplications=yes
+
 [Languages]
 Name: "german";  MessagesFile: "compiler:Languages\German.isl"
 Name: "english"; MessagesFile: "compiler:Default.isl"
