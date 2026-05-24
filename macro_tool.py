@@ -2019,7 +2019,7 @@ class MacroApp:
     def _check_update(self):
         try:
             with urllib.request.urlopen(VERSION_URL, timeout=6) as r:
-                latest = r.read().decode().strip()
+                latest = r.read().decode("utf-8-sig").strip()  # utf-8-sig strips BOM if present
             if latest != VERSION:
                 self.root.after(0, lambda: self._upd_avail(latest))
             else:
