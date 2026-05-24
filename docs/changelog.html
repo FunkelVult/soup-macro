@@ -156,6 +156,40 @@
 
   <div class="timeline ani" style="animation-delay:.15s">
 
+    <!-- v1.8 -->
+    <div class="tl-entry">
+      <div class="tl-rail">
+        <div class="tl-dot" style="background:var(--green);border-color:var(--green)"></div>
+        <div class="tl-line" style="background:linear-gradient(var(--green),var(--green))"></div>
+      </div>
+      <div class="tl-body">
+        <div class="v-card" style="border-color:rgba(52,211,153,.3)">
+          <div class="v-header">
+            <span class="v-badge" style="background:rgba(52,211,153,.12);color:var(--green);border-color:rgba(52,211,153,.4)">v1.8</span>
+            <span class="v-date" data-i18n="v18.date">May 24, 2026</span>
+            <span class="v-tag" style="background:rgba(52,211,153,.15);color:var(--green)" data-i18n="tag.latest">Latest</span>
+          </div>
+
+          <div class="change-group">
+            <div class="change-group-label" style="color:var(--green)" data-i18n="lbl.new">New Features</div>
+            <div class="change-list">
+              <div class="change-item"><span class="change-icon">✦</span><span data-i18n="v18.n1"><strong>Mouse movement recording enabled by default</strong> — The "Record mouse movements" checkbox is now checked on launch; movements are captured and replayed accurately</span></div>
+              <div class="change-item"><span class="change-icon">✦</span><span data-i18n="v18.n2"><strong>Configurable capture precision</strong> — New spinbox to set the movement throttle (4–200 ms); lower = smoother path, higher = smaller file size</span></div>
+              <div class="change-item"><span class="change-icon">✦</span><span data-i18n="v18.n3"><strong>Mouse move events visible in recording list</strong> — Consecutive move events are grouped and shown as "🖱 Move ×N" so you can verify capture is working</span></div>
+              <div class="change-item"><span class="change-icon">✦</span><span data-i18n="v18.n4"><strong>Move count in status</strong> — The event counter now shows total events + number of captured movement points separately</span></div>
+            </div>
+          </div>
+
+          <div class="change-group">
+            <div class="change-group-label" style="color:var(--blue)" data-i18n="lbl.fix">Bug Fixes</div>
+            <div class="change-list">
+              <div class="change-item"><span class="change-icon" style="color:var(--blue)">⚡</span><span data-i18n="v18.f1"><strong>Auto-update installer conflict</strong> — Replaced <code>root.destroy()</code> with <code>_quit() → os._exit(0)</code> so the process fully exits before the installer tries to overwrite the .exe; added <code>/FORCECLOSEAPPLICATIONS</code> flag as fallback</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- v1.7 -->
     <div class="tl-entry">
       <div class="tl-rail">
@@ -167,7 +201,6 @@
           <div class="v-header">
             <span class="v-badge" style="background:rgba(52,211,153,.12);color:var(--green);border-color:rgba(52,211,153,.4)">v1.7</span>
             <span class="v-date" data-i18n="v17.date">May 23, 2026</span>
-            <span class="v-tag" style="background:rgba(52,211,153,.15);color:var(--green)" data-i18n="tag.latest">Latest</span>
           </div>
 
           <div class="change-group">
@@ -360,7 +393,7 @@ const STRINGS = {
     'nav.changelog':'Changelog','nav.download':'Download',
     'cl.eyebrow':'Changelog','cl.title':'Version History',
     'cl.sub':'All changes, fixes and new features at a glance.',
-    'v17.date':'May 23, 2026','v16.date':'May 22, 2026',
+    'v18.date':'May 24, 2026','v17.date':'May 23, 2026','v16.date':'May 22, 2026',
     'v15.date':'May 22, 2026','v14.date':'May 20, 2026','v13.date':'May 2026',
     'tag.latest':'Latest','tag.installer':'Installer Release','tag.initial':'Initial Release',
     'lbl.new':'New Features','lbl.fix':'Bug Fixes',
@@ -376,6 +409,11 @@ const STRINGS = {
     'v17.f1':'<strong>Overlay labels hardcoded in German</strong> — Labels now use the i18n system and update when switching language',
     'v17.f2':'<strong>Language switch left pynput listeners running</strong> — All listeners are now properly stopped before the UI restarts',
     'v17.f3':'<strong>Macro loop read wrong delay variable</strong> — <code>_macro_loop</code> was reading <code>tame_delay</code> instead of its own; macro now has its own configurable startup delay',
+    'v18.n1':'<strong>Mouse movement recording enabled by default</strong> — The "Record mouse movements" checkbox is now checked on launch; movements are captured and replayed accurately',
+    'v18.n2':'<strong>Configurable capture precision</strong> — New spinbox to set the movement throttle (4–200 ms); lower = smoother path, higher = smaller file size',
+    'v18.n3':'<strong>Mouse move events visible in recording list</strong> — Consecutive move events are grouped and shown as "🖱 Move ×N" so you can verify capture is working',
+    'v18.n4':'<strong>Move count in status</strong> — The event counter now shows total events + number of captured movement points separately',
+    'v18.f1':'<strong>Auto-update installer conflict</strong> — Replaced <code>root.destroy()</code> with <code>_quit() → os._exit(0)</code> so the process fully exits before the installer tries to overwrite the .exe; added <code>/FORCECLOSEAPPLICATIONS</code> flag as fallback',
     'v15.n1':'<strong>System Tray</strong> — Closing the window minimizes to tray, with show/stop/quit menu',
     'v15.n2':'<strong>Overlay Window</strong> — Draggable, always-on-top status display for all modes',
     'v15.n3':'<strong>Sound Feedback</strong> — Beep on start/stop (configurable)',
@@ -412,7 +450,7 @@ const STRINGS = {
     'nav.changelog':'Changelog','nav.download':'Download',
     'cl.eyebrow':'Changelog','cl.title':'Versionshistorie',
     'cl.sub':'Alle Änderungen, Fixes und neuen Features auf einen Blick.',
-    'v17.date':'23. Mai 2026','v16.date':'22. Mai 2026',
+    'v18.date':'24. Mai 2026','v17.date':'23. Mai 2026','v16.date':'22. Mai 2026',
     'v15.date':'22. Mai 2026','v14.date':'20. Mai 2026','v13.date':'Mai 2026',
     'tag.latest':'Aktuell','tag.installer':'Installer Release','tag.initial':'Erstveröffentlichung',
     'lbl.new':'Neue Features','lbl.fix':'Fehlerbehebungen',
@@ -428,6 +466,11 @@ const STRINGS = {
     'v17.f1':'<strong>Overlay-Labels auf Deutsch hardcoded</strong> — Labels nutzen jetzt das i18n-System und aktualisieren sich beim Sprachwechsel',
     'v17.f2':'<strong>Sprachwechsel ließ pynput-Listener laufen</strong> — Alle Listener werden jetzt korrekt gestoppt bevor die UI neustartet',
     'v17.f3':'<strong>Makro-Loop las falsche Delay-Variable</strong> — <code>_macro_loop</code> las <code>tame_delay</code> statt eigenem Delay; Makro hat jetzt eigene konfigurierbare Startverzögerung',
+    'v18.n1':'<strong>Mausbewegungen standardmäßig aktiviert</strong> — Die Checkbox „Mausbewegungen aufzeichnen" ist jetzt beim Start gesetzt; Bewegungen werden aufgezeichnet und präzise wiedergegeben',
+    'v18.n2':'<strong>Konfigurierbare Aufnahmegenauigkeit</strong> — Neue Spinbox für den Bewegungs-Throttle (4–200 ms); kleiner = glattere Kurve, größer = kleinere Datei',
+    'v18.n3':'<strong>Mausbewegungen in der Liste sichtbar</strong> — Aufeinanderfolgende Bewegungen werden als „🖱 Bewegt ×N" gruppiert angezeigt, sodass die Aufnahme nachvollziehbar ist',
+    'v18.n4':'<strong>Bewegungsanzahl im Status</strong> — Der Ereigniszähler zeigt jetzt Gesamtereignisse + Bewegungspunkte separat an',
+    'v18.f1':'<strong>Auto-Update blockierte Installer</strong> — <code>root.destroy()</code> durch <code>_quit() → os._exit(0)</code> ersetzt, sodass der Prozess vollständig beendet ist bevor der Installer die .exe überschreibt; <code>/FORCECLOSEAPPLICATIONS</code> als Fallback hinzugefügt',
     'v15.n1':'<strong>System-Tray</strong> — Fenster schließen minimiert ins Tray mit Zeigen/Stoppen/Beenden-Menü',
     'v15.n2':'<strong>Overlay-Fenster</strong> — Schwebende, immer-sichtbare Statusanzeige für alle Modi',
     'v15.n3':'<strong>Sound-Feedback</strong> — Beep bei Start/Stop (konfigurierbar)',

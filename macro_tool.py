@@ -24,7 +24,7 @@ try:
 except ImportError:
     HAS_SOUND = False
 
-VERSION     = "1.7"
+VERSION     = "1.8"
 GITHUB_USER = "FunkelVult"
 GITHUB_REPO = "soup-macro"
 VERSION_URL = f"https://raw.githubusercontent.com/{GITHUB_USER}/{GITHUB_REPO}/main/version.txt"
@@ -283,6 +283,9 @@ S = {
     no_rec="Keine Aufnahme vorhanden!", rec_n="{n} Ereignisse",
     repeat="Wiederholen:", repeat_hint="(0 = endlos)",
     incl_mouse="Mausbewegungen aufzeichnen",
+    mouse_throttle="Genauigkeit (ms):",
+    rec_moves="{n} Bewegungen",
+    evt_move="🖱 Bewegt",
     save_rec="Aufnahme speichern", load_rec="Aufnahme laden",
     confirm_del="Löschen", hint="Hinweis", error="Fehler",
     key_lbl="Taste:", wait_lbl="Warten (s):",
@@ -382,6 +385,9 @@ S = {
     no_rec="No recording available!", rec_n="{n} events",
     repeat="Repeat:", repeat_hint="(0 = endless)",
     incl_mouse="Record mouse movements",
+    mouse_throttle="Precision (ms):",
+    rec_moves="{n} moves",
+    evt_move="🖱 Move",
     save_rec="Save Recording", load_rec="Load Recording",
     confirm_del="Delete", hint="Info", error="Error",
     key_lbl="Key:", wait_lbl="Wait (s):",
@@ -934,12 +940,22 @@ class MacroApp:
         rsb.pack(side="right", fill="y")
 
         opt = tk.Frame(c, bg=CARD)
-        opt.pack(fill="x", padx=16, pady=(0,6))
-        self.incl_mouse = tk.BooleanVar(value=False)
+        opt.pack(fill="x", padx=16, pady=(0,4))
+        self.incl_mouse = tk.BooleanVar(value=True)
         tk.Checkbutton(opt, text=self.t("incl_mouse"), variable=self.incl_mouse,
                        bg=CARD, fg=TEXT, selectcolor=INPUT, activebackground=CARD,
                        activeforeground=TEXT, font=("Segoe UI",9),
                        relief="flat", cursor="hand2").pack(side="left")
+
+        # Mouse throttle (interval between captured move events)
+        thr = tk.Frame(c, bg=CARD)
+        thr.pack(fill="x", padx=16, pady=(0,8))
+        tk.Label(thr, text=self.t("mouse_throttle"), font=("Segoe UI",8),
+                 bg=CARD, fg=MUTED2).pack(side="left", padx=(0,6))
+        self.mouse_throttle_ms = tk.IntVar(value=16)   # ~60 fps
+        self._spin_wrap(thr, self.mouse_throttle_ms, 4, 200, 4, w=5)
+        tk.Label(thr, text="ms", font=("Segoe UI",8),
+                 bg=CARD, fg=MUTED).pack(side="left", padx=(4,0))
 
         Divider(c, bg=BORDER).pack(fill="x", padx=16, pady=(4,10))
 
@@ -1388,6 +1404,8 @@ class MacroApp:
             "macro_steps": self.macro_steps, "macro_repeat": self.macro_repeat.get(),
             "macro_delay": self.macro_delay.get(),
             "recording": self.recording, "rec_repeat": self.rec_repeat.get(),
+            "incl_mouse": self.incl_mouse.get(),
+            "mouse_throttle_ms": self.mouse_throttle_ms.get(),
         }
         with open(p,"w") as f: json.dump(data,f,indent=2)
         self._add_recent_profile(p)
@@ -1420,6 +1438,8 @@ class MacroApp:
         self.macro_delay.set(d.get("macro_delay",0))
         self.recording = d.get("recording", self.recording)
         self.rec_repeat.set(d.get("rec_repeat",1))
+        self.incl_mouse.set(d.get("incl_mouse", True))
+        self.mouse_throttle_ms.set(d.get("mouse_throttle_ms", 16))
         use_rnd = d.get("spam_random", False)
         self._set_ivmode(use_rnd)
         self._update_hold_frame()
@@ -1493,10 +1513,12 @@ class MacroApp:
         def on_move(x,y):
             if not self.rec_running or not self.incl_mouse.get(): return
             now = time.time()
-            if now - self._last_move < 0.016: return
+            throttle = max(0.004, self.mouse_throttle_ms.get() / 1000.0)
+            if now - self._last_move < throttle: return
             self._last_move = now
             self.recording.append({"type":"mouse_move","x":x,"y":y,
                                    "t":round(now-self._rec_start,4)})
+            self.root.after(0, self._rec_refresh)
 
         def on_scroll(x,y,dx,dy):
             if not self.rec_running: return
@@ -1521,17 +1543,44 @@ class MacroApp:
 
     def _rec_refresh(self):
         n = len(self.recording)
-        self.rec_count.config(text=self.t("rec_n").format(n=n))
-        vis = [e for e in self.recording if e["type"] != "mouse_move"]
+        moves = sum(1 for e in self.recording if e["type"] == "mouse_move")
+        total_lbl = self.t("rec_n").format(n=n)
+        if moves:
+            total_lbl += f"  ·  {self.t('rec_moves').format(n=moves)}"
+        self.rec_count.config(text=total_lbl)
+
+        # Build display list — collapse consecutive mouse_move events into one summary line
         self.rec_list.delete(0, tk.END)
-        for e in vis[-100:]:
-            t_ = e["t"]
-            if   e["type"]=="key_down":
-                self.rec_list.insert(tk.END, f"  {t_:.2f}s   {self.t('evt_key')} {e['key']}")
-            elif e["type"]=="mouse_click" and e["pressed"]:
-                self.rec_list.insert(tk.END, f"  {t_:.2f}s   {self.t('evt_click')} {e['btn']} ({e['x']},{e['y']})")
-            elif e["type"]=="mouse_scroll":
-                self.rec_list.insert(tk.END, f"  {t_:.2f}s   {self.t('evt_scroll')} dy={e['dy']}")
+        display = []
+        pending_moves = 0
+        pending_move_start = None
+        for e in self.recording:
+            if e["type"] == "mouse_move":
+                if pending_moves == 0:
+                    pending_move_start = e["t"]
+                pending_moves += 1
+            else:
+                if pending_moves > 0:
+                    display.append(("move_group", pending_move_start, pending_moves))
+                    pending_moves = 0
+                display.append(e)
+        if pending_moves > 0:
+            display.append(("move_group", pending_move_start, pending_moves))
+
+        for item in display[-120:]:
+            if isinstance(item, tuple) and item[0] == "move_group":
+                _, t_, cnt = item
+                self.rec_list.insert(tk.END,
+                    f"  {t_:.2f}s   {self.t('evt_move')}  ×{cnt}")
+            else:
+                e = item
+                t_ = e["t"]
+                if   e["type"] == "key_down":
+                    self.rec_list.insert(tk.END, f"  {t_:.2f}s   {self.t('evt_key')} {e['key']}")
+                elif e["type"] == "mouse_click" and e["pressed"]:
+                    self.rec_list.insert(tk.END, f"  {t_:.2f}s   {self.t('evt_click')} {e['btn']} ({e['x']},{e['y']})")
+                elif e["type"] == "mouse_scroll":
+                    self.rec_list.insert(tk.END, f"  {t_:.2f}s   {self.t('evt_scroll')} dy={e['dy']}")
         self.rec_list.yview_moveto(1.0)
 
     def _rec_save(self):
